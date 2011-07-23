@@ -118,6 +118,17 @@ function sectionHal(z)
 	createWall(0, 0, z, true);
 	createFloor(0, 0, z);
 	createFloor(0, 1, z);
+	
+	createWall(8, 0, z);
+	createFloor(8, 0, z);
+	createFloor(8, 1, z);
+	
+	createFloor(9, 0, z);
+	createFloor(9, 1, z);
+	
+	createWall(10, 0, z, true);
+	createFloor(10, 0, z);
+	createFloor(10, 1, z);			
 }
 
 function sectionTrap(z)
@@ -125,38 +136,62 @@ function sectionTrap(z)
 	// trap
 	createFloor(0, 0, z);
 	createFloor(0, 1, z);
-	createCompleteTrap(1,0,z, false);
-	createCompleteTrap(-1,0,z, true);
+	createCompleteTrap(1, 0, z, false);
+	createCompleteTrap(-1, 0, z, true);
 	createFloor(0, 1, z, true);	
+	
+	createFloor(8, 0, z);
+	createFloor(9, 0, z);
+	createFloor(10, 0, z);
+
+	createFloor(8, 1, z);
+	createFloor(9, 1, z);
+	createFloor(10, 1, z);
+	
+	createFloor(8, 1, z, true);
+	createFloor(9, 1, z, true);
+	createFloor(10, 1, z, true);	
+	
+	createCompleteTrap(11, 0, z, false);
+	createCompleteTrap(7, 0, z, true);
+//	createFloor(0, 1, z, true);		
+	
+	for (i = 0 ; i < 5; i++)
+	{
+		createFloor(2 + i, 1, z, true);	
+		
+		if (z == 0)
+		{
+			createWall(2 + i, 0, z, null, false);
+			createWall(2 + i, 1, z, null, false, true);
+		}
+	}
 }
 function sectionPerron(z)
 {
-	// Perron
-	createFloor(-1, 1, z, true);
-	createFloor(-2, 1, z, true);
-	createFloor(0, 1, z, true);	
-	createFloor(1, 1, z, true);
-	createFloor(2, 1, z, true);
-	
-	createWall(-2, 1, z + 1, null, false, true);
-	createWall(-1, 1, z + 1, null, false, true);
-	createWall(0, 1, z + 1, null, false, true);
-	createWall(1, 1, z + 1, null, false, true);
-	createWall(2, 1, z + 1, null, false, true);
-	createWall(-2, 1, z, null, false, true);
-	createWall(-1, 1, z, null, false, true);
-	createWall(0, 1, z, null, false, true);
-	createWall(1, 1, z, null, false, true);
-	createWall(2, 1, z, null, false, true);	
-	
+	// Perron	
 	sectionHal(z);
+	
+	for (i = -2; i < 13; i++)
+	{
+		createFloor(i, 1, z, true);
+		createWall(i, 1, z + 1, null, false, true);
+		createWall(i, 1, z + 1, null, false, true);
+		createWall(i, 1, z + 1, null, false, true);
+
+		createWall(i, 1, z, null, false, true);
+		createWall(i, 1, z, null, false, true);
+		createWall(i, 1, z, null, false, true);			
+		
+	}	
 }
 function sectionSpoor(z)
 {
-	createFloor(-1, 1, z);
-	createFloor(-2, 1, z);
-	createFloor(1, 1, z);
-	createFloor(2, 1, z);	
+	for (i = -2; i < 13; i++)
+	{
+		createFloor(i, 1, z);
+		createFloor(i, 1, z);
+	}		
 	sectionHal(z);
 }
 
