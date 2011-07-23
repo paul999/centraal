@@ -8,7 +8,7 @@ function keylistener(event) {
     if(code == 0) {
 	code = event.charCode;
     }
-    alert(code);
+
     switch(code) {
     case 52:
 	// Links

@@ -3,6 +3,7 @@ var camera, scene, renderer;
 var torus_mesh, cube_mesh, sun_mesh;
 
 var pos = -1;
+var stats;
 
 /**
  * The initialisation stuff. 
@@ -65,6 +66,11 @@ function init() {
     renderer.setClearColorHex(0x7AA7FF, 0.8);
     renderer.setSize(window.innerWidth*0.95, window.innerHeight*0.95);
     container.appendChild(renderer.domElement);
+    
+	stats = new Stats();
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.top = '0px';
+	container.appendChild( stats.domElement );    
 }
 
 /**
@@ -77,6 +83,7 @@ function animate() {
     prepareFrame();
     // And finally, render the frame
     renderer.render(scene, camera);
+    stats.update();
 }
 var cl = getRandomColor();
 
@@ -89,37 +96,70 @@ function initWalls() {
     var material = new THREE.MeshLambertMaterial({
 		color: cl
     }); 
-    
-    
-    // no trap
-	scene.addChild(createWall(0, 0, 0));
-	scene.addChild(createWall(1, 0, 0));
-	scene.addChild(createFloor(0, 0, 0));
-	scene.addChild(createFloor(0, 1, 0));
-	
+   	
 	// trap
-	scene.addChild(createFloor(0, 0, 1));
-	scene.addChild(createFloor(0, 1, 1));
-	createTrap(scene, -1, 0, 1);
-	scene.addChild(createFloor(-2, 1, 1));
-	createTrap(scene, 0, 0, 1, false);
-	scene.addChild(createFloor(2, 1, 1));	
+	createFloor(0, 0, 0);
+	createFloor(0, 1, 0);
+	createCompleteTrap(1,0,0, false);
+	createCompleteTrap(-1,0,0, true);
+
+    // no trap, perron
+	createWall(0, 0, 1);
+	createWall(0, 0, 1, true);
+	createFloor(0, 0, 1);
+	createFloor(0, 1, 1);
+    // no trap, spoor
+	createWall(0, 0, 2);
+	createWall(0, 0, 2, true);
+	createFloor(0, 0, 2);
+	createFloor(0, 1, 2);
+    // no trap, spoor
+	createWall(0, 0, 3);
+	createWall(0, 0, 3, true);
+	createFloor(0, 0, 3);
+	createFloor(0, 1, 3);
+    // no trap, perron
+	createWall(0, 0, 4);
+	createWall(0, 0, 4, true);
+	createFloor(0, 0, 4);
+	createFloor(0, 1, 4);	
+	// trap
+	createFloor(0, 0, 5);
+	createFloor(0, 1, 5);
+	createCompleteTrap(1,0,5, false);
+	createCompleteTrap(-1,0,5, true);	
+	
+	// Spoor 1
+	createFloor(-1, 1, 3);
+	createFloor(-1, 1, 2);
+	createFloor(-2, 1, 3);
+	createFloor(-2, 1, 2);
+	// Spoor 1
+	createFloor(1, 1, 3);
+	createFloor(1, 1, 2);
+	createFloor(2, 1, 3);
+	createFloor(2, 1, 2);	
+	
+	// Perron
+	createFloor(-1, 1, 1, true);
+	createFloor(-2, 1, 1, true);
+	createFloor(0, 1, 1, true);	
+	createFloor(0, 1, 0, true);
+	createFloor(1, 1, 1, true);
+	createFloor(2, 1, 1, true);
 
     // no trap
-	scene.addChild(createWall(0, 0, 2));
-	scene.addChild(createWall(1, 0, 2));
-	scene.addChild(createFloor(0, 0, 2));
-	scene.addChild(createFloor(0, 1, 2));
-	
-    // no trap
-	scene.addChild(createWall(0, 0, 3));
-	scene.addChild(createWall(1, 0, 3));
-	scene.addChild(createFloor(0, 0, 3));
-	scene.addChild(createFloor(0, 1, 3));
+	createWall(0, 0, 3);
+	createWall(0, 0, 3, true);
+	createFloor(0, 0, 3);
+	createFloor(0, 1, 3);
 	
 	// trap
-	scene.addChild(createFloor(0, 0, 4));
-	scene.addChild(createFloor(0, 1, 4));	
+	createFloor(0, 0, 4);
+	createFloor(0, 1, 4);	
+	createCompleteTrap(1,0,4, false);
+	createCompleteTrap(-1,0,4, true);
+	
 }
 
 /**
@@ -136,7 +176,54 @@ function prepareFrame() {
 
 }
 
-function createTrap(scene, x, y, z, left)
+function createCompleteTrap(x, y, z, left)
+{
+	if (left == null)
+	{
+		left = true;
+	}
+	
+	if (left)
+	{
+		createTrap(x , y, z, left);
+		
+		createWall(x -1, y, z, null, false); 
+		createWall(x, y, z, null, false); 
+		createWall(x -1 , y, z + 1, null, false); 
+		createWall(x, y, z + 1, null, false); 
+		createWall(x - 1, y, z);		
+		
+		
+		createWall(x -1, y + 1, z, null, false, true); 
+		createWall(x, y + 1, z, null, false, false); 
+		createWall(x -1 , y + 1, z + 1, null, false, true); 
+		createWall(x, y + 1, z + 1, null, false, false); 
+		createWall(x - 1, y + 1, z, null, true, true); // left
+		createWall(x, y + 1, z, true, true, false);	 // right
+		
+
+	}
+	else
+	{
+		createTrap(x - 1, y, z, left);
+		
+		createWall(x, y, z, null, false); 
+		createWall(x + 1, y, z, null, false); 
+		createWall(x, y, z + 1, null, false); 
+		createWall(x + 1, y, z + 1, null, false); 
+		createWall(x + 1, y, z, true);
+		
+		createWall(x, y + 1, z, null, false, false); 
+		createWall(x +1, y + 1, z, null, false, true); 
+		createWall(x , y + 1, z + 1, null, false, false); 
+		createWall(x + 1 , y + 1, z + 1, null, false, true); 
+		createWall(x, y + 1, z, null, true, false);
+		createWall(x +1, y + 1, z, true, true, true);			
+
+	}
+}
+
+function createTrap(x, y, z, left)
 {
 	// Woei :D
 	
@@ -167,22 +254,25 @@ function createTrap(scene, x, y, z, left)
 	}		
 	
 	var floor_prim = new THREE.CubeGeometry(20, 300, 10);
+	var floor_rest = new THREE.CubeGeometry(170, 300, 10);
 
-	for (i = 0; i < 300 / 10; i++)
+	for (i = 0; i < 42; i++)
 	{
 		var fl = new THREE.Mesh(floor_prim, material);
 		
 		if (left)
 		{
-			fl.position.y = y + 300 - (10 * i);
+			fl.position.y = y + 420 - 10 * i;
+			
 			fl.position.z = z;
-			fl.position.x = x - 140 + 10 * i;
+			fl.position.x = x - 270 +  10 * i;
 		}
 		else
 		{
-			fl.position.y = y + 300 - (10 * i);
+			fl.position.y = y + 420 - (10 * i);
 			fl.position.z = z;
-			fl.position.x = x + 440 - 10 * i;		
+			fl.position.x = x + 570 - 10 * i;		
+
 		}
 		// Also rotate this 90 degrees, but on the other axel because it is a floor. 
 		fl.rotation.x = degToRad(90);
@@ -190,10 +280,26 @@ function createTrap(scene, x, y, z, left)
 		new THREE.ShadowVolume(fl);
 		scene.addChild(fl);
 	}
+		
+	var fl = new THREE.Mesh(floor_rest, material);
+	if (left)
+	{
+		fl.position.y = y + 425;
+		fl.position.z = z;
+		fl.position.x = x - 365;
+	}
+	else
+	{
+		fl.position.y = y + 425;
+		fl.position.z = z;
+		fl.position.x = x + 665;		
+	}	
+	fl.rotation.x = degToRad(90);
+	scene.addChild(fl);
 	
 }
 
-function createFloor(x, y, z)
+function createFloor(x, y, z, half)
 {
 	if (y == null)
 	{
@@ -211,10 +317,17 @@ function createFloor(x, y, z)
 	}
 	
 	x = x * 300;
+	
+
 
 	z = z * -300;
 	
 	y = y * 300 - 150;
+		
+	if (half)
+	{
+		y = y + 125;
+	}		
 
 	// Floor
 	var floor_prim = new THREE.CubeGeometry(300, 300, 10);
@@ -228,12 +341,17 @@ function createFloor(x, y, z)
 
 	new THREE.ShadowVolume(fl)
 
-	return fl;
+	scene.addChild(fl);
 }
 
-function createWall(x, y, z)
+function createWall(x, y, z, right, normal, half)
 {
-	var wall_prim = new THREE.CubeGeometry(300, 300, 10);
+	if (!half)
+		var wall_prim = new THREE.CubeGeometry(300, 300, 10);
+	else
+		var wall_prim = new THREE.CubeGeometry(300, 150, 10);
+		
+	if (normal == null) normal = true;	
 
 	if (y == null)
 	{
@@ -249,12 +367,30 @@ function createWall(x, y, z)
 	{
 		z = 0;
 	}
-	var tmp = (x % 2) ? 155 : 145;
+	var tmp = 0;
+	
+	if (right)
+		tmp = -145;
+	else
+		tmp = 145;
+	
+	if (!normal)
+		tmp = 0;
+	
 	x = x * 300 - tmp;
 
 	z = z * -300;
 	
-	y = y * 200;	
+	if (!normal)
+	{
+		z = z + 150;
+//		x = x - 5;
+	}
+	
+	y = y * 300 + 5;	
+	
+	if (half)
+		y = y - 75;
 
 	var wall = new THREE.Mesh(wall_prim, material);
 	wall.position.x = x;  
@@ -262,11 +398,13 @@ function createWall(x, y, z)
 	wall.position.y = y;
 	wall.position.z = z;
 	// Rotate 90 degrees; this amount of radians
+	
+	if (normal)
 	wall.rotation.y = degToRad(90);
 
 	new THREE.ShadowVolume(wall);
 
-	return wall;
+	scene.addChild(wall);
 }
 
 
