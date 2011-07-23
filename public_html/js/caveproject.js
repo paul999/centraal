@@ -64,7 +64,7 @@ function init() {
 
     // Set the background
     renderer.setClearColorHex(0x7AA7FF, 0.8);
-    renderer.setSize(window.innerWidth*0.95, window.innerHeight*0.95);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
     
 	stats = new Stats();
@@ -251,6 +251,12 @@ function createCompleteTrap(x, y, z, left)
 	}
 }
 
+var floor_klein = new THREE.CubeGeometry(20, 300, 10);
+var floor_rest = new THREE.CubeGeometry(150, 300, 10);
+var floor_prim = new THREE.CubeGeometry(300, 300, 10);
+var wall_prim = new THREE.CubeGeometry(300, 300, 10);
+var wall_half = new THREE.CubeGeometry(300, 150, 10);
+
 function createTrap(x, y, z, left)
 {
 	// Woei :D
@@ -281,12 +287,9 @@ function createTrap(x, y, z, left)
 		left = true;
 	}		
 	
-	var floor_prim = new THREE.CubeGeometry(20, 300, 10);
-	var floor_rest = new THREE.CubeGeometry(150, 300, 10);
-
 	for (i = 0; i < 45; i++)
 	{
-		var fl = new THREE.Mesh(floor_prim, material);
+		var fl = new THREE.Mesh(floor_klein, material);
 		
 		if (left)
 		{
@@ -357,9 +360,6 @@ function createFloor(x, y, z, half)
 		y = y + 150;
 	}		
 
-	// Floor
-	var floor_prim = new THREE.CubeGeometry(300, 300, 10);
-
 	var fl = new THREE.Mesh(floor_prim, material);
 	fl.position.y = y;
 	fl.position.z = z;
@@ -373,12 +373,7 @@ function createFloor(x, y, z, half)
 }
 
 function createWall(x, y, z, right, normal, half)
-{
-	if (!half)
-		var wall_prim = new THREE.CubeGeometry(300, 300, 10);
-	else
-		var wall_prim = new THREE.CubeGeometry(300, 150, 10);
-		
+{	
 	if (normal == null) normal = true;	
 
 	if (y == null)
@@ -420,7 +415,11 @@ function createWall(x, y, z, right, normal, half)
 	if (half)
 		y = y - 75;
 
-	var wall = new THREE.Mesh(wall_prim, material);
+	if (half)
+		var wall = new THREE.Mesh(wall_half, material);
+	else
+		var wall = new THREE.Mesh(wall_prim, material);
+		
 	wall.position.x = x;  
 	
 	wall.position.y = y;
