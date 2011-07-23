@@ -96,76 +96,69 @@ function initWalls() {
     var material = new THREE.MeshLambertMaterial({
 		color: cl
     }); 
-   	
-	// trap
-	createFloor(0, 0, 0);
-	createFloor(0, 1, 0);
-	createCompleteTrap(1,0,0, false);
-	createCompleteTrap(-1,0,0, true);
 
-    // no trap, perron
-	createWall(0, 0, 1);
-	createWall(0, 0, 1, true);
-	createFloor(0, 0, 1);
-	createFloor(0, 1, 1);
-    // no trap, spoor
-	createWall(0, 0, 2);
-	createWall(0, 0, 2, true);
-	createFloor(0, 0, 2);
-	createFloor(0, 1, 2);
-    // no trap, spoor
-	createWall(0, 0, 3);
-	createWall(0, 0, 3, true);
-	createFloor(0, 0, 3);
-	createFloor(0, 1, 3);
-    // no trap, perron
-	createWall(0, 0, 4);
-	createWall(0, 0, 4, true);
-	createFloor(0, 0, 4);
-	createFloor(0, 1, 4);	
-	// trap
-	createFloor(0, 0, 5);
-	createFloor(0, 1, 5);
-	createCompleteTrap(1,0,5, false);
-	createCompleteTrap(-1,0,5, true);	
-	
-	// Spoor 1
-	createFloor(-1, 1, 3);
-	createFloor(-1, 1, 2);
-	createFloor(-2, 1, 3);
-	createFloor(-2, 1, 2);
-	// Spoor 1
-	createFloor(1, 1, 3);
-	createFloor(1, 1, 2);
-	createFloor(2, 1, 3);
-	createFloor(2, 1, 2);	
-	
-	// Perron
-	createFloor(-1, 1, 1, true);
-	createFloor(-2, 1, 1, true);
-	createFloor(0, 1, 1, true);	
-	createFloor(0, 1, 0, true);
-	createFloor(1, 1, 1, true);
-	createFloor(2, 1, 1, true);
-
-    // no trap
-	createWall(0, 0, 3);
-	createWall(0, 0, 3, true);
-	createFloor(0, 0, 3);
-	createFloor(0, 1, 3);
-	
-	// trap
-	createFloor(0, 0, 4);
-	createFloor(0, 1, 4);	
-	createCompleteTrap(1,0,4, false);
-	createCompleteTrap(-1,0,4, true);
-	
+	sectionTrap(0);
+	sectionPerron(1);
+	sectionSpoor(2); //spoor 1
+	sectionSpoor(3); //spoor 2
+	sectionPerron(4);
+	sectionTrap(5);
+	sectionPerron(6);
+	sectionSpoor(7); //spoor 3
+	sectionSpoor(8); //spoor 4
+	sectionSpoor(9); //spoor 5
+	sectionPerron(10);
+	sectionTrap(11);
+	sectionPerron(12);	
 }
 
-/**
- * Initialize the elements that are flying around. 
- */
+function sectionHal(z)
+{
+	createWall(0, 0, z);
+	createWall(0, 0, z, true);
+	createFloor(0, 0, z);
+	createFloor(0, 1, z);
+}
 
+function sectionTrap(z)
+{
+	// trap
+	createFloor(0, 0, z);
+	createFloor(0, 1, z);
+	createCompleteTrap(1,0,z, false);
+	createCompleteTrap(-1,0,z, true);
+	createFloor(0, 1, z, true);	
+}
+function sectionPerron(z)
+{
+	// Perron
+	createFloor(-1, 1, z, true);
+	createFloor(-2, 1, z, true);
+	createFloor(0, 1, z, true);	
+	createFloor(1, 1, z, true);
+	createFloor(2, 1, z, true);
+	
+	createWall(-2, 1, z + 1, null, false, true);
+	createWall(-1, 1, z + 1, null, false, true);
+	createWall(0, 1, z + 1, null, false, true);
+	createWall(1, 1, z + 1, null, false, true);
+	createWall(2, 1, z + 1, null, false, true);
+	createWall(-2, 1, z, null, false, true);
+	createWall(-1, 1, z, null, false, true);
+	createWall(0, 1, z, null, false, true);
+	createWall(1, 1, z, null, false, true);
+	createWall(2, 1, z, null, false, true);	
+	
+	sectionHal(z);
+}
+function sectionSpoor(z)
+{
+	createFloor(-1, 1, z);
+	createFloor(-2, 1, z);
+	createFloor(1, 1, z);
+	createFloor(2, 1, z);	
+	sectionHal(z);
+}
 
 
 /**
@@ -254,24 +247,24 @@ function createTrap(x, y, z, left)
 	}		
 	
 	var floor_prim = new THREE.CubeGeometry(20, 300, 10);
-	var floor_rest = new THREE.CubeGeometry(170, 300, 10);
+	var floor_rest = new THREE.CubeGeometry(150, 300, 10);
 
-	for (i = 0; i < 42; i++)
+	for (i = 0; i < 45; i++)
 	{
 		var fl = new THREE.Mesh(floor_prim, material);
 		
 		if (left)
 		{
-			fl.position.y = y + 420 - 10 * i;
+			fl.position.y = y + 450 - 10 * i;
 			
 			fl.position.z = z;
-			fl.position.x = x - 270 +  10 * i;
+			fl.position.x = x - 300 +  10 * i;
 		}
 		else
 		{
-			fl.position.y = y + 420 - (10 * i);
+			fl.position.y = y + 450 - (10 * i);
 			fl.position.z = z;
-			fl.position.x = x + 570 - 10 * i;		
+			fl.position.x = x + 600 - 10 * i;		
 
 		}
 		// Also rotate this 90 degrees, but on the other axel because it is a floor. 
@@ -284,13 +277,13 @@ function createTrap(x, y, z, left)
 	var fl = new THREE.Mesh(floor_rest, material);
 	if (left)
 	{
-		fl.position.y = y + 425;
+		fl.position.y = y + 450;
 		fl.position.z = z;
 		fl.position.x = x - 365;
 	}
 	else
 	{
-		fl.position.y = y + 425;
+		fl.position.y = y + 450;
 		fl.position.z = z;
 		fl.position.x = x + 665;		
 	}	
@@ -326,7 +319,7 @@ function createFloor(x, y, z, half)
 		
 	if (half)
 	{
-		y = y + 125;
+		y = y + 150;
 	}		
 
 	// Floor
